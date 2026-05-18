@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>PocketLedger | Income & Expense Categories with Subcategories</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f4f7fc;
+      padding: 1.5rem;
+      color: #1e2a3e;
+    }
+
+    .app-container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      background: linear-gradient(135deg, #1e3c72, #2b4f8c);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .stats-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    .stat-card {
+      flex: 1;
+      min-width: 160px;
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.2rem 1rem;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      border: 1px solid #e9edf2;
+    }
+
+    .stat-card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #5b6e8c;
+    }
+
+    .stat-amount {
+      font-size: 1.9rem;
+      font-weight: 700;
+    }
+
+    .stat-income .stat-amount { color: #2b7a4b; }
+    .stat-expense .stat-amount { color: #c44536; }
+    .stat-savings .stat-amount { color: #2c5f8a; }
+
+    .month-bar {
+      background: white;
+      border-radius: 2rem;
+      padding: 0.9rem 1.5rem;
+      margin-bottom: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .month-nav {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #eef2f8;
+      padding: 0.3rem 0.8rem;
+      border-radius: 3rem;
+    }
+
+    .month-nav button {
+      background: white;
+      border: none;
+      font-size: 1.4rem;
+      width: 34px;
+      height: 34px;
+      border-radius: 40px;
+      cursor: pointer;
+      font-weight: bold;
+      color: #2c5f8a;
+    }
+
+    #monthDisplay {
+      font-weight: 700;
+      background: white;
+      padding: 0.3rem 1rem;
+      border-radius: 2rem;
+      min-width: 140px;
+      text-align: center;
+    }
+
+    .form-panel {
+      background: white;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #e9edf2;
+    }
+
+    .form-title {
+      font-weight: 600;
+      margin-bottom: 1.2rem;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .form-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: flex-end;
+    }
+
+    .input-group {
+      flex: 1;
+      min-width: 130px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.7rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: #5c6f8c;
+    }
+
+    input, select, button {
+      padding: 0.6rem 0.8rem;
+      border-radius: 1rem;
+      border: 1px solid #cddae9;
+      background: white;
+      width: 100%;
+      font-size: 0.9rem;
+    }
+
+    button {
+      background: #eef2f8;
+      cursor: pointer;
+      font-weight: 500;
+    }
+
+    button.primary {
+      background: #2c5f8a;
+      color: white;
+    }
+
+    .subcategory-row {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .add-subcat-btn, .add-maincat-btn {
+      width: auto;
+      background: #e9f0f9;
+      font-size: 0.8rem;
+      padding: 0.6rem 1rem;
+      white-space: nowrap;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      background: white;
+      border-radius: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid #eef2f8;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.9rem 0.8rem;
+      border-bottom: 1px solid #edf2f7;
+    }
+
+    th {
+      background: #f8fafd;
+      font-weight: 600;
+    }
+
+    .badge {
+      background: #e9f0f9;
+      padding: 0.2rem 0.7rem;
+      border-radius: 2rem;
+      font-size: 0.7rem;
+    }
+
+    .action-btns {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .view-month-btn {
+      background: none;
+      border: none;
+      color: #2c5f8a;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .empty-msg {
+      text-align: center;
+      padding: 2rem;
+      color: #7c8ea0;
+    }
+
+    footer {
+      text-align: center;
+      font-size: 0.7rem;
+      color: #7b8cae;
+      margin-top: 1rem;
+    }
+
+    .settings-group {
+      margin-top: 1rem;
+      padding-top: 0.5rem;
+      border-top: 1px dashed #ddd;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    @media (max-width: 700px) {
+      body { padding: 1rem; }
+      .form-grid { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+<div class="app-container">
+  <div class="header">
+    <h1>📒 PocketLedger</h1>
+    <p>offline • separate income & expense categories • add your own main categories & subcategories</p>
+  </div>
+
+  <div class="stats-grid">
+    <div class="stat-card stat-income"><h3>💰 TOTAL INCOME</h3><div class="stat-amount" id="totalIncome">$0</div></div>
+    <div class="stat-card stat-expense"><h3>📉 TOTAL EXPENSES</h3><div class="stat-amount" id="totalExpense">$0</div></div>
+    <div class="stat-card stat-savings"><h3>🏦 NET SAVINGS</h3><div class="stat-amount" id="netSavings">$0</div></div>
+  </div>
+
+  <div class="month-bar">
+    <div class="month-nav">
+      <button id="prevMonthBtn">◀</button>
+      <span id="monthDisplay">—</span>
+      <button id="nextMonthBtn">▶</button>
+    </div>
+    <input type="month" id="monthPicker">
+  </div>
+
+  <div class="form-panel">
+    <div class="form-title">
+      <span id="formTitle">➕ Add transaction</span>
+      <button id="cancelEditBtn" class="cancel-btn" style="display: none;">✖ Cancel edit</button>
+    </div>
+    <div class="form-grid">
+      <div class="input-group"><label>Description</label><input type="text" id="descInput" placeholder="e.g., Salary, Groceries"></div>
+      <div class="input-group"><label>Amount ($)</label><input type="number" id="amountInput" step="0.01"></div>
+      <div class="input-group"><label>Date</label><input type="date" id="dateInput"></div>
+      <div class="input-group"><label>Type</label><select id="typeSelect"><option value="expense">Expense</option><option value="income">Income</option></select></div>
+      <div class="input-group">
+        <label>Main Category</label>
+        <div class="subcategory-row">
+          <select id="mainCategorySelect" style="flex:1"></select>
+          <button type="button" id="addMainCatBtn" class="add-maincat-btn" title="Add new main category for this type">➕ Main</button>
+        </div>
+      </div>
+      <div class="input-group">
+        <label>Subcategory</label>
+        <div class="subcategory-row">
+          <select id="subCategorySelect" style="flex:1"></select>
+          <button type="button" id="addSubcatBtn" class="add-subcat-btn" title="Add new subcategory">➕ Sub</button>
+        </div>
+      </div>
+      <div class="input-group"><button id="submitBtn" class="primary">➕ Add transaction</button></div>
+    </div>
+  </div>
+
+  <div class="table-wrapper">
+    <table>
+      <thead><tr><th>Date</th><th>Description</th><th>Category</th><th>Type</th><th>Amount</th><th>Actions</th></tr></thead>
+      <tbody id="transactionsBody"><tr><td colspan="6" class="empty-msg">Loading...</td></tr>
+    </table>
+  </div>
+
+  <div class="summary-section">
+    <h3>📆 Month-to-month savings overview</h3>
+    <div class="table-wrapper">
+      <table><thead><tr><th>Month</th><th>Income</th><th>Expenses</th><th>Savings</th><th></th></tr></thead>
+      <tbody id="summaryBody"><tr><td colspan="5" class="empty-msg">Add transactions to see summary</td></tr></tbody>
+    </table>
+    </div>
+  </div>
+  <footer>💾 All data stored locally. Income & expense have separate category trees. Use ➕ Main to add your own income/expense main categories (e.g., Betting, Freelance) and ➕ Sub to add subcategories (e.g., UNESWA, Betway).</footer>
+</div>
+
+<script>
+  // -------------------- DATA STRUCTURES --------------------
+  // Two separate maps: incomeCategoriesMap and expenseCategoriesMap
+  // Each: { "MainCategoryName": ["sub1", "sub2", ...] }
+
+  let incomeCategoriesMap = {};
+  let expenseCategoriesMap = {};
+
+  let transactions = [];        // each: { id, description, amount, date, type, mainCategory, subCategory }
+  let editingId = null;
+  let currentMonth = "";
+
+  // DOM elements
+  const totalIncomeEl = document.getElementById("totalIncome");
+  const totalExpenseEl = document.getElementById("totalExpense");
+  const netSavingsEl = document.getElementById("netSavings");
+  const monthDisplaySpan = document.getElementById("monthDisplay");
+  const monthPickerInput = document.getElementById("monthPicker");
+  const prevBtn = document.getElementById("prevMonthBtn");
+  const nextBtn = document.getElementById("nextMonthBtn");
+  const transactionsBody = document.getElementById("transactionsBody");
+  const summaryBody = document.getElementById("summaryBody");
+  const descInput = document.getElementById("descInput");
+  const amountInput = document.getElementById("amountInput");
+  const dateInput = document.getElementById("dateInput");
+  const typeSelect = document.getElementById("typeSelect");
+  const mainCategorySelect = document.getElementById("mainCategorySelect");
+  const subCategorySelect = document.getElementById("subCategorySelect");
+  const submitBtn = document.getElementById("submitBtn");
+  const formTitleSpan = document.getElementById("formTitle");
+  const cancelEditBtn = document.getElementById("cancelEditBtn");
+  const addMainCatBtn = document.getElementById("addMainCatBtn");
+  const addSubcatBtn = document.getElementById("addSubcatBtn");
+
+  // -------------------- DEFAULT CATEGORIES --------------------
+  function initDefaultCategories() {
+    // INCOME categories (as requested: Salary with UNESWA/Other, Betting with Betway/Other, plus typical lecturer income)
+    incomeCategoriesMap = {
+      "Salary": ["UNESWA", "Other", "Consultancy", "Overtime"],
+      "Betting": ["Betway", "Other", "Lottery", "Sportsbook"],
+      "Freelance": ["Teaching", "Writing", "Consulting", "Other"],
+      "Investment": ["Dividends", "Interest", "Stocks", "Crypto"],
+      "Gift": ["Birthday", "Holiday", "Other"],
+      "Bonus": ["Performance", "13th month", "Other"],
+      "Other Income": ["Miscellaneous", "Refund", "Side Hustle"]
+    };
+    // also allow user to add more main categories dynamically
+
+    // EXPENSE categories (the 8 main groups, without "Income" as expense)
+    expenseCategoriesMap = {
+      "Miscellaneous": ["Bank cost", "Clothes", "Healthcare", "Miscellaneous", "Netflix", "Student loan", "Unknown"],
+      "Entertainment": ["Bowling", "Cinema", "Concert", "Electronics", "Entertainment", "Gym", "Hobby", "Nightclub", "Sports", "Subscription", "Vacation"],
+      "Food & Drinks": ["Groceries", "Restaurants", "Coffee", "Fast food", "Bakery", "Delivery", "Alcohol", "Snacks"],
+      "Housing": ["Rent", "Mortgage", "Utilities", "Repairs", "Furniture", "Internet", "Maintenance"],
+      "Lifestyle": ["Shopping", "Personal care", "Gifts", "Hobbies", "Wellness", "Pets"],
+      "Savings": ["Emergency fund", "Retirement", "Investment deposit", "Savings account", "Goal"],
+      "Transportation": ["Fuel", "Public transit", "Taxi/Ride share", "Parking", "Maintenance", "Insurance", "Bike"]
+    };
+  }
+
+  // -------------------- PERSISTENCE --------------------
+  function saveAllData() {
+    localStorage.setItem("pocketledger_transactions", JSON.stringify(transactions));
+    localStorage.setItem("pocketledger_income_categories", JSON.stringify(incomeCategoriesMap));
+    localStorage.setItem("pocketledger_expense_categories", JSON.stringify(expenseCategoriesMap));
+  }
+
+  function loadCategoryMaps() {
+    const storedIncome = localStorage.getItem("pocketledger_income_categories");
+    const storedExpense = localStorage.getItem("pocketledger_expense_categories");
+    if (storedIncome && storedExpense) {
+      incomeCategoriesMap = JSON.parse(storedIncome);
+      expenseCategoriesMap = JSON.parse(storedExpense);
+    } else {
+      initDefaultCategories();
+      saveAllData();
+    }
+    // ensure each map has at least one main category
+    if (Object.keys(incomeCategoriesMap).length === 0) {
+      incomeCategoriesMap = { "Salary": ["UNESWA", "Other"] };
+    }
+    if (Object.keys(expenseCategoriesMap).length === 0) {
+      expenseCategoriesMap = { "Miscellaneous": ["General"] };
+    }
+  }
+
+  function loadTransactions() {
+    const stored = localStorage.getItem("pocketledger_transactions");
+    if (stored) {
+      let raw = JSON.parse(stored);
+      // migration: ensure all transactions have valid mainCategory/subCategory according to type
+      transactions = raw.map(t => {
+        if (t.mainCategory && t.subCategory) return t;
+        // fallback for old entries
+        if (t.type === "income") {
+          let firstMain = Object.keys(incomeCategoriesMap)[0] || "Salary";
+          let firstSub = (incomeCategoriesMap[firstMain] && incomeCategoriesMap[firstMain][0]) || "Other";
+          return { ...t, mainCategory: firstMain, subCategory: firstSub };
+        } else {
+          let firstMain = Object.keys(expenseCategoriesMap)[0] || "Miscellaneous";
+          let firstSub = (expenseCategoriesMap[firstMain] && expenseCategoriesMap[firstMain][0]) || "General";
+          return { ...t, mainCategory: firstMain, subCategory: firstSub };
+        }
+      });
+      saveAllData();
+    } else {
+      // sample transactions with new structure
+      transactions = [
+        { id: "s1", description: "Salary UNESWA", amount: 3500, date: "2025-04-01", type: "income", mainCategory: "Salary", subCategory: "UNESWA" },
+        { id: "s2", description: "Betway win", amount: 120, date: "2025-04-05", type: "income", mainCategory: "Betting", subCategory: "Betway" },
+        { id: "s3", description: "Freelance lecture", amount: 300, date: "2025-04-10", type: "income", mainCategory: "Freelance", subCategory: "Teaching" },
+        { id: "s4", description: "Grocery shopping", amount: 85.40, date: "2025-04-03", type: "expense", mainCategory: "Food & Drinks", subCategory: "Groceries" },
+        { id: "s5", description: "Rent payment", amount: 950, date: "2025-04-02", type: "expense", mainCategory: "Housing", subCategory: "Rent" },
+        { id: "s6", description: "Netflix", amount: 15.99, date: "2025-03-15", type: "expense", mainCategory: "Miscellaneous", subCategory: "Netflix" },
+        { id: "s7", description: "Cinema", amount: 24, date: "2025-03-20", type: "expense", mainCategory: "Entertainment", subCategory: "Cinema" },
+        { id: "s8", description: "Consulting income", amount: 500, date: "2025-03-25", type: "income", mainCategory: "Salary", subCategory: "Consultancy" }
+      ];
+      saveAllData();
+    }
+  }
+
+  // -------------------- UI: CATEGORY DROPDOWNS BASED ON TYPE --------------------
+  function getCurrentCategoryMap() {
+    return typeSelect.value === "income" ? incomeCategoriesMap : expenseCategoriesMap;
+  }
+
+  function populateMainCategorySelect() {
+    const currentMap = getCurrentCategoryMap();
+    const mainCats = Object.keys(currentMap);
+    const previousVal = mainCategorySelect.value;
+    mainCategorySelect.innerHTML = "";
+    if (mainCats.length === 0) {
+      // fallback: create a default
+      const defaultCat = typeSelect.value === "income" ? "Salary" : "Miscellaneous";
+      mainCategorySelect.innerHTML = `<option value="${defaultCat}">${defaultCat}</option>`;
+    } else {
+      mainCats.forEach(cat => {
+        const opt = document.createElement("option");
+        opt.value = cat;
+        opt.textContent = cat;
+        mainCategorySelect.appendChild(opt);
+      });
+    }
+    // try to keep previous selection if valid in new map
+    if (previousVal && currentMap[previousVal]) mainCategorySelect.value = previousVal;
+    else mainCategorySelect.value = mainCats[0];
+    populateSubcategories();
+  }
+
+  function populateSubcategories() {
+    const mainCat = mainCategorySelect.value;
+    const currentMap = getCurrentCategoryMap();
+    let subs = currentMap[mainCat];
+    if (!subs || subs.length === 0) subs = ["General"];
+    const currentSub = subCategorySelect.value;
+    subCategorySelect.innerHTML = "";
+    subs.forEach(sub => {
+      const opt = document.createElement("option");
+      opt.value = sub;
+      opt.textContent = sub;
+      subCategorySelect.appendChild(opt);
+    });
+    if (currentSub && subs.includes(currentSub)) subCategorySelect.value = currentSub;
+    else subCategorySelect.value = subs[0];
+  }
+
+  // Add new main category for current type (income or expense)
+  function addNewMainCategory() {
+    const currentType = typeSelect.value;
+    const typeLabel = currentType === "income" ? "Income" : "Expense";
+    let newMain = prompt(`Enter new main category for ${typeLabel} (e.g., Betting, Freelance, Scholarships):`);
+    if (!newMain || newMain.trim() === "") return;
+    newMain = newMain.trim();
+    const currentMap = getCurrentCategoryMap();
+    if (currentMap[newMain]) {
+      alert("Main category already exists!");
+      return;
+    }
+    // also ask for initial subcategory (optional)
+    let firstSub = prompt(`Enter a default subcategory for "${newMain}" (e.g., Other, General):`, "Other");
+    if (!firstSub) firstSub = "Other";
+    currentMap[newMain] = [firstSub.trim()];
+    saveAllData();
+    populateMainCategorySelect();
+    mainCategorySelect.value = newMain;
+    populateSubcategories();
+  }
+
+  // Add new subcategory to currently selected main category
+  function addNewSubcategory() {
+    const mainCat = mainCategorySelect.value;
+    const currentMap = getCurrentCategoryMap();
+    let newSub = prompt(`Enter new subcategory for "${mainCat}":`);
+    if (!newSub || newSub.trim() === "") return;
+    newSub = newSub.trim();
+    if (currentMap[mainCat].includes(newSub)) {
+      alert("Subcategory already exists!");
+      return;
+    }
+    currentMap[mainCat].push(newSub);
+    saveAllData();
+    populateSubcategories();
+    subCategorySelect.value = newSub;
+  }
+
+  // -------------------- TRANSACTION CRUD --------------------
+  function resetFormToAdd() {
+    editingId = null;
+    formTitleSpan.innerText = "➕ Add transaction";
+    submitBtn.innerText = "➕ Add transaction";
+    cancelEditBtn.style.display = "none";
+    descInput.value = "";
+    amountInput.value = "";
+    const today = new Date().toISOString().slice(0,10);
+    dateInput.value = today;
+    typeSelect.value = "expense";
+    // refresh category dropdowns based on type
+    populateMainCategorySelect();
+  }
+
+  function startEditTransaction(transaction) {
+    editingId = transaction.id;
+    formTitleSpan.innerText = "✏️ Edit transaction";
+    submitBtn.innerText = "💾 Update transaction";
+    cancelEditBtn.style.display = "inline-block";
+    descInput.value = transaction.description;
+    amountInput.value = transaction.amount;
+    dateInput.value = transaction.date;
+    typeSelect.value = transaction.type;
+    // after type change, populate main categories and then set values
+    populateMainCategorySelect();
+    mainCategorySelect.value = transaction.mainCategory;
+    populateSubcategories();
+    subCategorySelect.value = transaction.subCategory;
+  }
+
+  function saveTransactionFromForm() {
+    const description = descInput.value.trim();
+    const amountRaw = amountInput.value;
+    const amount = parseFloat(amountRaw);
+    const date = dateInput.value;
+    const type = typeSelect.value;
+    const mainCategory = mainCategorySelect.value;
+    const subCategory = subCategorySelect.value;
+
+    if (!description) { alert("Please enter a description"); return; }
+    if (isNaN(amount) || amount <= 0) { alert("Amount must be positive"); return; }
+    if (!date) { alert("Select date"); return; }
+
+    if (editingId !== null) {
+      const idx = transactions.findIndex(t => t.id === editingId);
+      if (idx !== -1) {
+        transactions[idx] = { ...transactions[idx], description, amount, date, type, mainCategory, subCategory };
+        saveAllData();
+      }
+      resetFormToAdd();
+    } else {
+      const newId = Date.now() + "-" + Math.random().toString(36).substring(2, 8);
+      transactions.push({ id: newId, description, amount, date, type, mainCategory, subCategory });
+      saveAllData();
+      resetFormToAdd();
+    }
+    renderAll();
+  }
+
+  function deleteTransactionById(id) {
+    if (confirm("Delete this transaction?")) {
+      transactions = transactions.filter(t => t.id !== id);
+      saveAllData();
+      if (editingId === id) resetFormToAdd();
+      renderAll();
+    }
+  }
+
+  // -------------------- MONTH FILTER & STATS --------------------
+  function getTransactionsForMonth(monthYYYYMM) {
+    return transactions.filter(t => t.date.startsWith(monthYYYYMM));
+  }
+
+  function getMonthTotals(monthYYYYMM) {
+    let income = 0, expense = 0;
+    getTransactionsForMonth(monthYYYYMM).forEach(t => {
+      if (t.type === "income") income += t.amount;
+      else expense += t.amount;
+    });
+    return { income, expense, savings: income - expense };
+  }
+
+  function renderCurrentMonth() {
+    if (!currentMonth) return;
+    const { income, expense, savings } = getMonthTotals(currentMonth);
+    totalIncomeEl.innerText = `$${income.toFixed(2)}`;
+    totalExpenseEl.innerText = `$${expense.toFixed(2)}`;
+    netSavingsEl.innerText = `$${savings.toFixed(2)}`;
+    netSavingsEl.style.color = savings >= 0 ? "#2b7a4b" : "#c44536";
+
+    const monthTransactions = getTransactionsForMonth(currentMonth);
+    if (monthTransactions.length === 0) {
+      transactionsBody.innerHTML = `<tr><td colspan="6" class="empty-msg">✨ No transactions for ${currentMonth}. Add one above.</td></tr>`;
+    } else {
+      transactionsBody.innerHTML = "";
+      monthTransactions.sort((a,b) => b.date.localeCompare(a.date));
+      monthTransactions.forEach(t => {
+        const row = transactionsBody.insertRow();
+        row.className = t.type === "income" ? "income-row" : "expense-row";
+        row.insertCell(0).innerText = t.date;
+        row.insertCell(1).innerText = t.description;
+        row.insertCell(2).innerHTML = `<span class="badge">${escapeHtml(t.mainCategory)}: ${escapeHtml(t.subCategory)}</span>`;
+        row.insertCell(3).innerText = t.type === "income" ? "💰 Income" : "💸 Expense";
+        const amountCell = row.insertCell(4);
+        amountCell.className = "amount";
+        amountCell.innerText = t.type === "income" ? `+$${t.amount.toFixed(2)}` : `-$${t.amount.toFixed(2)}`;
+        const actionsCell = row.insertCell(5);
+        actionsCell.className = "action-btns";
+        const editBtn = document.createElement("button");
+        editBtn.innerText = "✏️";
+        editBtn.onclick = () => startEditTransaction(t);
+        const delBtn = document.createElement("button");
+        delBtn.innerText = "🗑️";
+        delBtn.onclick = () => deleteTransactionById(t.id);
+        actionsCell.appendChild(editBtn);
+        actionsCell.appendChild(delBtn);
+      });
+    }
+  }
+
+  function buildMonthlySummary() {
+    const monthMap = new Map();
+    transactions.forEach(t => {
+      const monthKey = t.date.substring(0,7);
+      if (!monthMap.has(monthKey)) monthMap.set(monthKey, { income: 0, expense: 0 });
+      const entry = monthMap.get(monthKey);
+      if (t.type === "income") entry.income += t.amount;
+      else entry.expense += t.amount;
+    });
+    const sortedMonths = Array.from(monthMap.keys()).sort().reverse();
+    if (sortedMonths.length === 0) {
+      summaryBody.innerHTML = `<tr><td colspan="5" class="empty-msg">No data yet — add transactions</td></tr>`;
+      return;
+    }
+    summaryBody.innerHTML = "";
+    sortedMonths.forEach(month => {
+      const { income, expense } = monthMap.get(month);
+      const savings = income - expense;
+      const row = summaryBody.insertRow();
+      row.insertCell(0).innerText = month;
+      row.insertCell(1).innerHTML = `<strong>$${income.toFixed(2)}</strong>`;
+      row.insertCell(2).innerHTML = `$${expense.toFixed(2)}`;
+      row.insertCell(3).innerHTML = `<span style="font-weight:600; color:${savings>=0?'#2b7a4b':'#c44536'}">$${savings.toFixed(2)}</span>`;
+      const viewCell = row.insertCell(4);
+      const viewBtn = document.createElement("button");
+      viewBtn.innerText = "📅 View month";
+      viewBtn.className = "view-month-btn";
+      viewBtn.onclick = () => {
+        currentMonth = month;
+        updateMonthPickerAndDisplay();
+        renderCurrentMonth();
+        buildMonthlySummary();
+      };
+      viewCell.appendChild(viewBtn);
+    });
+  }
+
+  function renderAll() {
+    renderCurrentMonth();
+    buildMonthlySummary();
+  }
+
+  function updateMonthPickerAndDisplay() {
+    monthPickerInput.value = currentMonth;
+    monthDisplaySpan.innerText = currentMonth.replace("-", " · ");
+  }
+
+  function shiftMonth(delta) {
+    let [year, month] = currentMonth.split("-").map(Number);
+    let newDate = new Date(year, month - 1 + delta, 1);
+    let newYear = newDate.getFullYear();
+    let newMonth = (newDate.getMonth() + 1).toString().padStart(2, '0');
+    currentMonth = `${newYear}-${newMonth}`;
+    updateMonthPickerAndDisplay();
+    renderCurrentMonth();
+    buildMonthlySummary();
+  }
+
+  function onMonthPickerChange() {
+    currentMonth = monthPickerInput.value;
+    if (!currentMonth) {
+      const today = new Date();
+      currentMonth = `${today.getFullYear()}-${(today.getMonth()+1).toString().padStart(2,'0')}`;
+    }
+    updateMonthPickerAndDisplay();
+    renderCurrentMonth();
+    buildMonthlySummary();
+  }
+
+  function initCurrentMonth() {
+    const now = new Date();
+    currentMonth = `${now.getFullYear()}-${(now.getMonth()+1).toString().padStart(2,'0')}`;
+    monthPickerInput.value = currentMonth;
+    monthDisplaySpan.innerText = currentMonth.replace("-", " · ");
+  }
+
+  function escapeHtml(str) { return str.replace(/[&<>]/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; return m;}); }
+
+  // -------------------- EVENT LISTENERS --------------------
+  function bindEvents() {
+    prevBtn.addEventListener("click", () => shiftMonth(-1));
+    nextBtn.addEventListener("click", () => shiftMonth(1));
+    monthPickerInput.addEventListener("change", onMonthPickerChange);
+    submitBtn.addEventListener("click", saveTransactionFromForm);
+    cancelEditBtn.addEventListener("click", resetFormToAdd);
+    addMainCatBtn.addEventListener("click", addNewMainCategory);
+    addSubcatBtn.addEventListener("click", addNewSubcategory);
+    typeSelect.addEventListener("change", () => {
+      populateMainCategorySelect(); // refresh categories when type changes
+    });
+    mainCategorySelect.addEventListener("change", () => {
+      populateSubcategories();
+    });
+  }
+
+  function bootstrap() {
+    loadCategoryMaps();
+    loadTransactions();
+    initCurrentMonth();
+    populateMainCategorySelect();
+    bindEvents();
+    renderAll();
+    if (!dateInput.value) {
+      const today = new Date().toISOString().slice(0,10);
+      dateInput.value = today;
+    }
+  }
+
+  bootstrap();
+</script>
+</body>
+</html>
