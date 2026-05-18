@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BudgetFlow • Mobile Optimized</title>
+    <title>BudgetFlow • Eswatini Localized</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -15,7 +15,6 @@
         @media (min-width: 768px) { .card:hover { transform: translateY(-4px); } }
         table { border-collapse: separate; border-spacing: 0; }
         th, td { padding: 12px 16px; }
-        /* Smooth scrolling for mobile */
         .overflow-y-auto { -webkit-overflow-scrolling: touch; }
     </style>
 </head>
@@ -24,10 +23,10 @@
     <div class="hidden md:flex w-64 bg-zinc-900 border-r border-zinc-800 flex-col shrink-0">
         <div class="p-6 border-b border-zinc-800">
             <div class="flex items-center gap-3">
-                <div class="w-9 h-9 bg-yellow-400 rounded-2xl flex items-center justify-center text-zinc-950 font-bold text-2xl">₿</div>
+                <div class="w-9 h-9 bg-yellow-400 rounded-2xl flex items-center justify-center text-zinc-950 font-bold text-xl">E</div>
                 <div><span class="logo-font text-3xl font-semibold tracking-tighter">BudgetFlow</span></div>
             </div>
-            <p class="text-zinc-500 text-sm mt-1">Online • Personal</p>
+            <p class="text-zinc-500 text-sm mt-1">Online • Personal Layout</p>
         </div>
         
         <div class="flex-1 p-4 space-y-1">
@@ -82,18 +81,18 @@
                         <div class="flex justify-between items-start">
                             <div>
                                 <div class="text-yellow-900 text-xs md:text-sm font-medium tracking-wider">AVAILABLE BALANCE</div>
-                                <div id="main-balance" class="text-4xl md:text-6xl font-bold mt-2 tracking-tighter">R0.00</div>
+                                <div id="main-balance" class="text-4xl md:text-6xl font-bold mt-2 tracking-tighter">E0.00</div>
                             </div>
-                            <div class="text-4xl md:text-6xl opacity-30 font-bold">₿</div>
+                            <div class="text-4xl md:text-6xl opacity-30 font-bold">E</div>
                         </div>
                         <div class="mt-6 md:mt-8 flex gap-6 md:gap-8 text-xs md:text-sm">
                             <div>
                                 <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-emerald-600 rounded-full"></div>Income</div>
-                                <div id="dash-income" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">R0.00</div>
+                                <div id="dash-income" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">E0.00</div>
                             </div>
                             <div>
                                 <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-red-600 rounded-full"></div>Expenses</div>
-                                <div id="dash-expenses" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">R0.00</div>
+                                <div id="dash-expenses" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">E0.00</div>
                             </div>
                         </div>
                     </div>
@@ -188,8 +187,10 @@
                 <h1 class="text-2xl md:text-3xl font-semibold">Settings</h1>
                 <div class="max-w-md bg-zinc-900 rounded-3xl p-6 md:p-8 space-y-6">
                     <div>
-                        <label class="block text-zinc-400 text-xs uppercase font-medium tracking-wider mb-2">Base Balance Goal</label>
-                        <input id="income-goal" type="number" class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl p-4 text-zinc-100 focus:outline-none focus:border-yellow-400" onchange="saveIncomeGoal()">
+                        <label class="block text-zinc-400 text-xs uppercase font-medium tracking-wider mb-2">Base Currency Region</label>
+                        <div class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl p-4 text-zinc-400 font-medium">
+                            Eswatini Lilangeni (E)
+                        </div>
                     </div>
                     <div class="pt-4 border-t border-zinc-800 space-y-3">
                         <button onclick="clearAllData()" class="w-full py-3 text-red-400 hover:bg-red-950/20 rounded-2xl border border-red-900/40 text-sm font-medium transition-colors">Clear Saved Entries</button>
@@ -222,14 +223,14 @@
                 <div>
                     <label class="text-[10px] font-bold text-zinc-400 tracking-wider uppercase block mb-1">Value Amount</label>
                     <div class="relative">
-                        <span class="absolute left-5 top-3.5 text-xl font-semibold text-zinc-500">R</span>
+                        <span class="absolute left-5 top-3.5 text-xl font-semibold text-zinc-500">E</span>
                         <input id="modal-amount" type="number" inputmode="decimal" step="0.01" class="w-full bg-zinc-800 rounded-2xl pl-10 pr-4 py-3.5 text-2xl font-bold text-zinc-100 focus:outline-none focus:ring-2 focus:ring-yellow-400">
                     </div>
                 </div>
                 
                 <div>
                     <label class="text-[10px] font-bold text-zinc-400 tracking-wider uppercase block mb-1">Details Description</label>
-                    <input id="modal-desc" type="text" class="w-full bg-zinc-800 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Merchant name, source label...">
+                    <input id="modal-desc" type="text" class="w-full bg-zinc-800 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Merchant name, salary source details...">
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -275,13 +276,6 @@
             if (savedTrans) transactions = JSON.parse(savedTrans);
             const savedBudgets = localStorage.getItem('budgetflow_budgets');
             if (savedBudgets) budgets = JSON.parse(savedBudgets);
-            const savedGoal = localStorage.getItem('budgetflow_income_goal');
-            document.getElementById('income-goal').value = savedGoal || "15000";
-        }
-
-        function saveIncomeGoal() {
-            localStorage.setItem('budgetflow_income_goal', document.getElementById('income-goal').value);
-            if (!document.getElementById('page-0').classList.contains('hidden')) renderDashboard();
         }
         
         function updateMonthDisplay() {
@@ -330,9 +324,9 @@
         
         function renderDashboard() {
             const summary = calculateMonthlySummary(currentViewMonth);
-            document.getElementById('main-balance').textContent = 'R' + summary.balance.toLocaleString('en-ZA', {minimumFractionDigits: 2});
-            document.getElementById('dash-income').textContent = 'R' + summary.income.toLocaleString('en-ZA', {minimumFractionDigits: 2});
-            document.getElementById('dash-expenses').textContent = 'R' + summary.expenses.toLocaleString('en-ZA', {minimumFractionDigits: 2});
+            document.getElementById('main-balance').textContent = 'E' + summary.balance.toLocaleString('en-ZA', {minimumFractionDigits: 2});
+            document.getElementById('dash-income').textContent = 'E' + summary.income.toLocaleString('en-ZA', {minimumFractionDigits: 2});
+            document.getElementById('dash-expenses').textContent = 'E' + summary.expenses.toLocaleString('en-ZA', {minimumFractionDigits: 2});
             
             let savingsRate = summary.income > 0 ? Math.round(((summary.income - summary.expenses) / summary.income) * 100) : 0;
             document.getElementById('savings-rate').textContent = savingsRate + '%';
@@ -350,7 +344,7 @@
             const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             
             if (sorted.length === 0) {
-                container.innerHTML = `<div class="text-zinc-500 text-center py-6 text-sm">No transaction items found</div>`;
+                container.innerHTML = `<div class="text-zinc-500 text-center py-6 text-sm">No transactions registered yet</div>`;
                 return;
             }
             
@@ -368,7 +362,7 @@
                         </div>
                     </div>
                     <div class="font-semibold shrink-0 pl-2 ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
-                        ${t.type === 'income' ? '+' : '-'}R${parseFloat(t.amount).toFixed(2)}
+                        ${t.type === 'income' ? '+' : '-'}E${parseFloat(t.amount).toFixed(2)}
                     </div>
                 `;
                 container.appendChild(div);
@@ -451,7 +445,7 @@
             }).sort((a, b) => new Date(b.date) - new Date(a.date));
             
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-zinc-500 text-xs">No entries matching filter profiles</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-zinc-500 text-xs">No entries matching search criteria</td></tr>`;
                 return;
             }
             
@@ -466,7 +460,7 @@
                     </td>
                     <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400">${escapeHtml(t.category)}</span></td>
                     <td class="py-3 text-right font-semibold ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
-                        R${parseFloat(t.amount).toFixed(2)}
+                        E${parseFloat(t.amount).toFixed(2)}
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -497,7 +491,7 @@
                 div.innerHTML = `
                     <div class="flex justify-between items-center text-sm">
                         <div class="font-medium">${escapeHtml(cat)}</div>
-                        <div class="text-xs text-zinc-400 font-mono">R${spent.toFixed(0)} / R${limit}</div>
+                        <div class="text-xs text-zinc-400 font-mono">E${spent.toFixed(0)} / E${limit}</div>
                     </div>
                     <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
                         <div class="h-full bg-yellow-400 transition-all" style="width: ${percent}%"></div>
@@ -512,7 +506,7 @@
         }
         
         function editBudget(cat) {
-            const val = prompt(`Set threshold limit value for ${cat}:`, budgets[cat] || 0);
+            const val = prompt(`Set target limit value for ${cat}:`, budgets[cat] || 0);
             if (val !== null && !isNaN(parseFloat(val))) {
                 budgets[cat] = Math.max(0, parseFloat(val));
                 saveToLocalStorage();
@@ -529,7 +523,7 @@
             Object.entries(expenseByCat).sort((a,b)=>b[1]-a[1]).slice(0,4).forEach(([cat, amt]) => {
                 const row = document.createElement('div');
                 row.className = "flex justify-between items-center border-b border-zinc-800 pb-2 last:border-0";
-                row.innerHTML = `<span class="text-zinc-400">${escapeHtml(cat)}</span><span class="font-semibold text-red-400">R${amt.toFixed(2)}</span>`;
+                row.innerHTML = `<span class="text-zinc-400">${escapeHtml(cat)}</span><span class="font-semibold text-red-400">E${amt.toFixed(2)}</span>`;
                 topContainer.appendChild(row);
             });
             
@@ -549,7 +543,7 @@
                 
                 const card = document.createElement('div');
                 card.className = "flex justify-between items-center bg-zinc-800/40 rounded-xl p-3 text-xs";
-                card.innerHTML = `<span class="font-medium">${d.toLocaleString('default', {month:'long'})}</span><div class="text-right font-mono"><span class="text-emerald-400">+R${s.income.toFixed(0)}</span><br><span class="text-red-400">-R${s.expenses.toFixed(0)}</span></div>`;
+                card.innerHTML = `<span class="font-medium">${d.toLocaleString('default', {month:'long'})}</span><div class="text-right font-mono"><span class="text-emerald-400">+E${s.income.toFixed(0)}</span><br><span class="text-red-400">-E${s.expenses.toFixed(0)}</span></div>`;
                 summaryContainer.appendChild(card);
             }
             
@@ -580,8 +574,8 @@
         
         function setType(type) {
             currentType = type;
-            document.getElementById('type-expense').className = type === 'expense' ? "flex-1 py-3 rounded-2xl border-2 border-red-500 text-red-400 font-semibold text-sm bg-red-950/10" : "flex-1 py-3 rounded-2xl border-2 border-zinc-800 text-zinc-500 font-semibold text-sm";
-            document.getElementById('type-income').className = type === 'income' ? "flex-1 py-3 rounded-2xl border-2 border-emerald-500 text-emerald-400 font-semibold text-sm bg-emerald-950/10" : "flex-1 py-3 rounded-2xl border-2 border-zinc-800 text-zinc-500 font-semibold text-sm";
+            document.getElementById('type-expense').className = type === 'expense' ? "flex-1 py-3 rounded-2xl border-2 border-red-500 text-red-400 font-semibold text-sm bg-red-950/10" : "flex-1 py-3 rounded-2xl border-2 border-zinc-700 text-zinc-500 font-semibold text-sm";
+            document.getElementById('type-income').className = type === 'income' ? "flex-1 py-3 rounded-2xl border-2 border-emerald-500 text-emerald-400 font-semibold text-sm bg-emerald-950/10" : "flex-1 py-3 rounded-2xl border-2 border-zinc-700 text-zinc-500 font-semibold text-sm";
             
             const select = document.getElementById('modal-category');
             select.innerHTML = '';
@@ -605,7 +599,7 @@
         
         function saveTransaction() {
             const amt = parseFloat(document.getElementById('modal-amount').value);
-            if (!amt || amt <= 0) { alert("Provide a valid currency volume"); return; }
+            if (!amt || amt <= 0) { alert("Provide a valid currency numeric value"); return; }
             
             transactions.unshift({
                 id: Date.now().toString(),
@@ -613,7 +607,7 @@
                 type: currentType,
                 category: document.getElementById('modal-category').value,
                 amount: amt,
-                description: document.getElementById('modal-desc').value.trim() || "Unspecified Description"
+                description: document.getElementById('modal-desc').value.trim() || "Unspecified Ledger Item"
             });
             
             saveToLocalStorage();
@@ -635,7 +629,7 @@
         
         function showMonthPicker() {
             const y = prompt("Year (YYYY):", currentViewMonth.split('-')[0]);
-            const m = prompt("Month Index (1-12):", currentViewMonth.split('-')[1]);
+            const m = prompt("Month (1-12):", currentViewMonth.split('-')[1]);
             if (y && m) { currentViewMonth = y + '-' + String(parseInt(m)).padStart(2, '0'); updateMonthDisplay(); navigate(0); }
         }
         
@@ -657,19 +651,19 @@
                 r.onload = ev => {
                     try {
                         const data = JSON.parse(ev.target.result);
-                        if (data.transactions && confirm("Overwrite working client state database?")) {
+                        if (data.transactions && confirm("Overwrite working local client layout database?")) {
                             transactions = data.transactions; budgets = data.budgets || {};
                             saveToLocalStorage(); navigate(0);
                         }
-                    } catch { alert("Invalid structure profiles parsed"); }
+                    } catch { alert("Invalid structure profile backup layout parsed"); }
                 };
                 r.readAsText(file);
             };
             input.click();
         }
         
-        function clearAllData() { if (confirm("Wipe current local storage registers permanently?")) { transactions = []; budgets = {}; saveToLocalStorage(); navigate(0); } }
-        function resetApp() { if (confirm("Purge app structural caches?")) { localStorage.clear(); location.reload(); } }
+        function clearAllData() { if (confirm("Wipe all locally saved transactions permanently?")) { transactions = []; budgets = {}; saveToLocalStorage(); navigate(0); } }
+        function resetApp() { if (confirm("Purge application engine variables?")) { localStorage.clear(); location.reload(); } }
         function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
         
         window.onload = function() {
