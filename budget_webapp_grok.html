@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>BudgetFlow • Eswatini Localized</title>
+    <title>BudgetFlow • Expense Tracker</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -26,7 +26,7 @@
                 <div class="w-9 h-9 bg-yellow-400 rounded-2xl flex items-center justify-center text-zinc-950 font-bold text-xl">E</div>
                 <div><span class="logo-font text-3xl font-semibold tracking-tighter">BudgetFlow</span></div>
             </div>
-            <p class="text-zinc-500 text-sm mt-1">Online • Personal Layout</p>
+            <p class="text-zinc-500 text-sm mt-1">Online • Expense Tracker</p>
         </div>
         
         <div class="flex-1 p-4 space-y-1">
@@ -35,15 +35,12 @@
                     <i class="fa-solid fa-house w-5"></i><span>Dashboard</span>
                 </button>
                 <button onclick="navigate(1)" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-zinc-400 hover:bg-zinc-800 d-nav" id="d-nav-1">
-                    <i class="fa-solid fa-receipt w-5"></i><span>Transactions</span>
+                    <i class="fa-solid fa-receipt w-5"></i><span>Ledger Registry</span>
                 </button>
                 <button onclick="navigate(2)" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-zinc-400 hover:bg-zinc-800 d-nav" id="d-nav-2">
-                    <i class="fa-solid fa-chart-pie w-5"></i><span>Budgets</span>
+                    <i class="fa-solid fa-chart-line w-5"></i><span>Historical Analytics</span>
                 </button>
                 <button onclick="navigate(3)" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-zinc-400 hover:bg-zinc-800 d-nav" id="d-nav-3">
-                    <i class="fa-solid fa-chart-line w-5"></i><span>Reports</span>
-                </button>
-                <button onclick="navigate(4)" class="w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-zinc-400 hover:bg-zinc-800 d-nav" id="d-nav-4">
                     <i class="fa-solid fa-gear w-5"></i><span>Settings</span>
                 </button>
             </nav>
@@ -51,7 +48,7 @@
         
         <div class="p-4 border-t border-zinc-800">
             <button onclick="showAddTransactionModal()" class="w-full bg-yellow-400 hover:bg-yellow-300 text-zinc-950 font-semibold py-4 rounded-3xl flex items-center justify-center gap-2 text-lg">
-                <i class="fa-solid fa-plus"></i><span>Add Transaction</span>
+                <i class="fa-solid fa-plus"></i><span>Log Transaction</span>
             </button>
         </div>
     </div>
@@ -80,18 +77,18 @@
                     <div class="col-span-12 md:col-span-5 bg-gradient-to-br from-yellow-400 to-amber-500 text-zinc-950 rounded-3xl p-6 md:p-8 card">
                         <div class="flex justify-between items-start">
                             <div>
-                                <div class="text-yellow-900 text-xs md:text-sm font-medium tracking-wider">AVAILABLE BALANCE</div>
+                                <div class="text-yellow-900 text-xs md:text-sm font-medium tracking-wider">AVAILABLE POOL BALANCE</div>
                                 <div id="main-balance" class="text-4xl md:text-6xl font-bold mt-2 tracking-tighter">E0.00</div>
                             </div>
                             <div class="text-4xl md:text-6xl opacity-30 font-bold">E</div>
                         </div>
                         <div class="mt-6 md:mt-8 flex gap-6 md:gap-8 text-xs md:text-sm">
                             <div>
-                                <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-emerald-600 rounded-full"></div>Income</div>
+                                <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-emerald-600 rounded-full"></div>Total Income</div>
                                 <div id="dash-income" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">E0.00</div>
                             </div>
                             <div>
-                                <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-red-600 rounded-full"></div>Expenses</div>
+                                <div class="flex items-center gap-2 text-yellow-900 font-medium"><div class="w-2 h-2 bg-red-600 rounded-full"></div>Total Expenses</div>
                                 <div id="dash-expenses" class="text-xl md:text-2xl font-bold mt-1 text-zinc-950">E0.00</div>
                             </div>
                         </div>
@@ -100,7 +97,7 @@
                     <div class="col-span-12 md:col-span-4 bg-zinc-900 rounded-3xl p-6 md:p-8 card flex flex-col justify-between">
                         <div class="flex justify-between items-center">
                             <div>
-                                <div class="text-zinc-400 text-sm">Savings Rate</div>
+                                <div class="text-zinc-400 text-sm">Calculated Savings Rate</div>
                                 <div id="savings-rate" class="text-3xl md:text-5xl font-bold mt-1">0%</div>
                             </div>
                             <i class="fa-solid fa-piggy-bank text-3xl md:text-4xl text-yellow-400"></i>
@@ -112,29 +109,35 @@
                     
                     <div class="col-span-12 md:col-span-3 bg-zinc-900 rounded-3xl p-6 md:p-8 card flex flex-col justify-between">
                         <div>
-                            <div class="text-zinc-400 text-sm">This Month</div>
+                            <div class="text-zinc-400 text-sm">Entries This Month</div>
                             <div id="transaction-count" class="text-3xl md:text-4xl font-semibold mt-1">0</div>
-                            <div class="text-zinc-500 text-sm">transactions listed</div>
+                            <div class="text-zinc-500 text-sm">items recorded</div>
                         </div>
                         <button onclick="navigate(1)" class="mt-4 md:mt-0 text-left text-yellow-400 hover:text-yellow-300 flex items-center gap-2 text-sm font-medium">
-                            Review list <i class="fa-solid fa-arrow-right"></i>
+                            Go to Ledger <i class="fa-solid fa-arrow-right"></i>
                         </button>
                     </div>
                     
                     <div class="col-span-12 lg:col-span-7 bg-zinc-900 rounded-3xl p-6 md:p-8 card">
-                        <h2 class="font-semibold text-base md:text-lg mb-4">Income vs Expenses</h2>
-                        <div class="h-48 w-full"><canvas id="trendChart"></canvas></div>
+                        <h2 class="font-semibold text-base md:text-lg mb-4">Income vs Expense Trends</h2>
+                        <div class="h-56 w-full"><canvas id="trendChart"></canvas></div>
                     </div>
                     
                     <div class="col-span-12 lg:col-span-5 bg-zinc-900 rounded-3xl p-6 md:p-8 card">
-                        <h2 class="font-semibold text-base md:text-lg mb-4">Spending Distribution</h2>
-                        <div class="h-48 w-full max-w-xs mx-auto"><canvas id="pieChart"></canvas></div>
+                        <h2 class="font-semibold text-base md:text-lg mb-4">Spending Share Breakdown</h2>
+                        <div class="h-56 w-full max-w-xs mx-auto"><canvas id="pieChart"></canvas></div>
+                    </div>
+
+                    <div class="col-span-12 bg-zinc-900 rounded-3xl p-6 md:p-8 card">
+                        <h2 class="font-semibold text-base md:text-lg mb-2">Cost Volume by Category</h2>
+                        <p class="text-xs text-zinc-500 mb-4">Identifies exactly where you can cut down expenses</p>
+                        <div class="h-64 w-full"><canvas id="categoryBarChart"></canvas></div>
                     </div>
                     
                     <div class="col-span-12 bg-zinc-900 rounded-3xl p-6 md:p-8 card">
                         <div class="flex justify-between items-center mb-4">
-                            <h2 class="font-semibold text-base md:text-lg">Recent Ledger Entries</h2>
-                            <button onclick="navigate(1)" class="text-yellow-400 text-xs md:text-sm hover:underline">View All →</button>
+                            <h2 class="font-semibold text-base md:text-lg">Recent Registry Records</h2>
+                            <button onclick="navigate(1)" class="text-yellow-400 text-xs md:text-sm hover:underline">Full Registry →</button>
                         </div>
                         <div id="recent-transactions" class="space-y-4"></div>
                     </div>
@@ -143,8 +146,8 @@
             
             <div id="page-1" class="hidden space-y-6">
                 <div class="flex flex-col sm:flex-row gap-4 justify-between sm:items-center">
-                    <h1 class="text-2xl md:text-3xl font-semibold">Ledger Entries</h1>
-                    <input id="search-input" onkeyup="filterTransactions()" type="text" placeholder="Filter descriptions..." class="bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 focus:outline-none focus:border-yellow-400 w-full sm:w-64 text-sm">
+                    <h1 class="text-2xl md:text-3xl font-semibold">Ledger Registry</h1>
+                    <input id="search-input" onkeyup="filterTransactions()" type="text" placeholder="Search descriptions/labels..." class="bg-zinc-900 border border-zinc-700 rounded-2xl px-4 py-3 focus:outline-none focus:border-yellow-400 w-full sm:w-64 text-sm">
                 </div>
                 
                 <div class="bg-zinc-900 rounded-3xl overflow-hidden overflow-x-auto">
@@ -163,38 +166,33 @@
             </div>
             
             <div id="page-2" class="hidden space-y-6">
-                <h1 class="text-2xl md:text-3xl font-semibold">Category Envelope Limits</h1>
-                <div id="budgets-container" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6"></div>
-            </div>
-            
-            <div id="page-3" class="hidden space-y-6">
-                <h1 class="text-2xl md:text-3xl font-semibold">Long Term Reports</h1>
+                <h1 class="text-2xl md:text-3xl font-semibold">Historical Cycles</h1>
                 <div class="bg-zinc-900 rounded-3xl p-4 md:p-8 h-64"><canvas id="reportChart"></canvas></div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div class="bg-zinc-900 p-6 rounded-3xl">
-                        <h3 class="font-semibold mb-4 text-zinc-300">Top Monthly Expenses</h3>
+                        <h3 class="font-semibold mb-4 text-zinc-300">Top Cost Concentrators</h3>
                         <div id="top-expenses" class="space-y-4 text-sm"></div>
                     </div>
                     <div class="bg-zinc-900 p-6 rounded-3xl space-y-4">
-                        <h3 class="font-semibold text-zinc-300">Historical Cycles</h3>
+                        <h3 class="font-semibold text-zinc-300">Monthly Performance Blocks</h3>
                         <div id="monthly-summary" class="space-y-3 max-h-60 overflow-y-auto"></div>
                     </div>
                 </div>
             </div>
             
-            <div id="page-4" class="hidden space-y-6">
+            <div id="page-3" class="hidden space-y-6">
                 <h1 class="text-2xl md:text-3xl font-semibold">Settings</h1>
                 <div class="max-w-md bg-zinc-900 rounded-3xl p-6 md:p-8 space-y-6">
                     <div>
-                        <label class="block text-zinc-400 text-xs uppercase font-medium tracking-wider mb-2">Base Currency Region</label>
+                        <label class="block text-zinc-400 text-xs uppercase font-medium tracking-wider mb-2">Active Currency Region</label>
                         <div class="w-full bg-zinc-800 border border-zinc-700 rounded-2xl p-4 text-zinc-400 font-medium">
                             Eswatini Lilangeni (E)
                         </div>
                     </div>
                     <div class="pt-4 border-t border-zinc-800 space-y-3">
-                        <button onclick="clearAllData()" class="w-full py-3 text-red-400 hover:bg-red-950/20 rounded-2xl border border-red-900/40 text-sm font-medium transition-colors">Clear Saved Entries</button>
-                        <button onclick="resetApp()" class="w-full py-3 text-zinc-500 hover:text-zinc-300 text-xs tracking-wide">Reset Sandbox Variables</button>
+                        <button onclick="clearAllData()" class="w-full py-3 text-red-400 hover:bg-red-950/20 rounded-2xl border border-red-900/40 text-sm font-medium transition-colors">Clear Ledger History</button>
+                        <button onclick="resetApp()" class="w-full py-3 text-zinc-500 hover:text-zinc-300 text-xs tracking-wide">Reset Data Sandbox</button>
                     </div>
                 </div>
             </div>
@@ -203,16 +201,16 @@
 
     <div class="md:hidden fixed bottom-0 left-0 right-0 h-16 bg-zinc-900 border-t border-zinc-800 px-2 flex items-center justify-around z-40">
         <button onclick="navigate(0)" class="flex flex-col items-center gap-1 text-yellow-400 m-nav" id="m-nav-0"><i class="fa-solid fa-house text-lg"></i><span class="text-[10px] font-medium">Home</span></button>
-        <button onclick="navigate(1)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-1"><i class="fa-solid fa-receipt text-lg"></i><span class="text-[10px] font-medium">List</span></button>
+        <button onclick="navigate(1)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-1"><i class="fa-solid fa-receipt text-lg"></i><span class="text-[10px] font-medium">Ledger</span></button>
         <button onclick="showAddTransactionModal()" class="flex flex-col items-center justify-center bg-yellow-400 text-zinc-950 w-12 h-12 rounded-2xl shadow-lg -translate-y-3 active:scale-95 transition-transform"><i class="fa-solid fa-plus text-xl"></i></button>
-        <button onclick="navigate(2)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-2"><i class="fa-solid fa-chart-pie text-lg"></i><span class="text-[10px] font-medium">Budgets</span></button>
-        <button onclick="navigate(3)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-3"><i class="fa-solid fa-chart-line text-lg"></i><span class="text-[10px] font-medium">Data</span></button>
+        <button onclick="navigate(2)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-2"><i class="fa-solid fa-chart-line text-lg"></i><span class="text-[10px] font-medium">Data</span></button>
+        <button onclick="navigate(3)" class="flex flex-col items-center gap-1 text-zinc-500 m-nav" id="m-nav-3"><i class="fa-solid fa-gear text-lg"></i><span class="text-[10px] font-medium">Settings</span></button>
     </div>
 
     <div id="add-modal" class="hidden fixed inset-0 bg-black/90 flex items-end md:items-center justify-center z-50 p-0 md:p-4 animate-fade-in">
         <div class="bg-zinc-900 w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 md:p-8 space-y-6 pb-8 max-h-[92vh] overflow-y-auto">
             <div class="w-12 h-1 bg-zinc-700 rounded-full mx-auto md:hidden -mt-2 mb-2"></div>
-            <h2 class="text-xl md:text-2xl font-bold tracking-tight">Log New Operation</h2>
+            <h2 class="text-xl md:text-2xl font-bold tracking-tight">Record Operation</h2>
             
             <div class="space-y-4">
                 <div class="flex gap-3">
@@ -230,7 +228,7 @@
                 
                 <div>
                     <label class="text-[10px] font-bold text-zinc-400 tracking-wider uppercase block mb-1">Details Description</label>
-                    <input id="modal-desc" type="text" class="w-full bg-zinc-800 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Merchant name, salary source details...">
+                    <input id="modal-desc" type="text" class="w-full bg-zinc-800 rounded-2xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400" placeholder="Merchant name, payment details...">
                 </div>
                 
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -247,35 +245,34 @@
             
             <div class="flex gap-3 pt-4">
                 <button onclick="hideModal()" class="flex-1 py-3.5 border border-zinc-700 rounded-2xl text-sm font-medium text-zinc-400 active:bg-zinc-800">Cancel</button>
-                <button onclick="saveTransaction()" class="flex-1 py-3.5 bg-yellow-400 text-zinc-950 font-bold rounded-2xl text-sm shadow-md active:bg-yellow-500">Post Item</button>
+                <button onclick="saveTransaction()" class="flex-1 py-3.5 bg-yellow-400 text-zinc-950 font-bold rounded-2xl text-sm shadow-md active:bg-yellow-500">Post Record</button>
             </div>
         </div>
     </div>
     
     <script>
-        const MAIN_CATEGORIES = ["Miscellaneous", "Entertainment", "Food & Drinks", "Housing", "Income", "Lifestyle", "Savings", "Transportation"];
-        const EXPENSE_BUDGET_CATEGORIES = MAIN_CATEGORIES.filter(cat => cat !== "Income");
+        // Updated categories list containing "Loans" natively
+        const MAIN_CATEGORIES = ["Miscellaneous", "Entertainment", "Food & Drinks", "Housing", "Income", "Lifestyle", "Loans", "Savings", "Transportation"];
+        const EXPENSE_CATEGORIES = MAIN_CATEGORIES.filter(cat => cat !== "Income");
         
         let transactions = [];
-        let budgets = {};
+        let budgets = {}; // Kept behind the scenes for legacy compatibility with imports
         let currentDate = new Date();
         let currentViewMonth = currentDate.getFullYear() + '-' + String(currentDate.getMonth() + 1).padStart(2, '0');
         let currentType = 'expense';
         
         let trendChartInstance = null;
         let pieChartInstance = null;
+        let categoryBarChartInstance = null;
         let reportChartInstance = null;
         
         function saveToLocalStorage() {
             localStorage.setItem('budgetflow_transactions', JSON.stringify(transactions));
-            localStorage.setItem('budgetflow_budgets', JSON.stringify(budgets));
         }
         
         function loadFromLocalStorage() {
             const savedTrans = localStorage.getItem('budgetflow_transactions');
             if (savedTrans) transactions = JSON.parse(savedTrans);
-            const savedBudgets = localStorage.getItem('budgetflow_budgets');
-            if (savedBudgets) budgets = JSON.parse(savedBudgets);
         }
         
         function updateMonthDisplay() {
@@ -285,7 +282,7 @@
         }
         
         function navigate(page) {
-            for (let i = 0; i < 5; i++) {
+            for (let i = 0; i < 4; i++) {
                 const pageEl = document.getElementById(`page-${i}`);
                 if (pageEl) pageEl.classList.add('hidden');
                 
@@ -293,7 +290,15 @@
                 if (dNav) dNav.className = "w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-zinc-400 hover:bg-zinc-800 d-nav";
                 
                 const mNav = document.getElementById(`m-nav-${i}`);
-                if (mNav) mNav.className = "flex flex-col items-center gap-1 text-zinc-500 m-nav";
+                if (mNav) {
+                    if (i === 2) {
+                        document.getElementById('m-nav-2').className = "flex flex-col items-center gap-1 text-zinc-500 m-nav";
+                    } else if (i === 3) {
+                        document.getElementById('m-nav-3').className = "flex flex-col items-center gap-1 text-zinc-500 m-nav";
+                    } else {
+                        mNav.className = "flex flex-col items-center gap-1 text-zinc-500 m-nav";
+                    }
+                }
             }
             
             const currentPage = document.getElementById(`page-${page}`);
@@ -302,13 +307,14 @@
             const currentDNav = document.getElementById(`d-nav-${page}`);
             if (currentDNav) currentDNav.className = "w-full flex items-center gap-3 px-4 py-3 rounded-2xl text-white bg-zinc-800 font-medium d-nav";
             
-            const currentMNav = document.getElementById(`m-nav-${page}`);
+            // Handle mobile navigation highlighting carefully with the budget tab dropped
+            let mobileNavId = page;
+            const currentMNav = document.getElementById(`m-nav-${mobileNavId}`);
             if (currentMNav) currentMNav.className = "flex flex-col items-center gap-1 text-yellow-400 m-nav";
             
             if (page === 0) renderDashboard();
             if (page === 1) renderTransactions();
-            if (page === 2) renderBudgets();
-            if (page === 3) renderReports();
+            if (page === 2) renderReports();
         }
         
         function calculateMonthlySummary(monthKey) {
@@ -344,7 +350,7 @@
             const sorted = [...transactions].sort((a, b) => new Date(b.date) - new Date(a.date)).slice(0, 5);
             
             if (sorted.length === 0) {
-                container.innerHTML = `<div class="text-zinc-500 text-center py-6 text-sm">No transactions registered yet</div>`;
+                container.innerHTML = `<div class="text-zinc-500 text-center py-6 text-sm">No transaction entries captured yet</div>`;
                 return;
             }
             
@@ -361,7 +367,7 @@
                             <div class="text-[11px] text-zinc-500">${escapeHtml(t.category)} • ${new Date(t.date).toLocaleDateString('en-ZA')}</div>
                         </div>
                     </div>
-                    <div class="font-semibold shrink-0 pl-2 ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
+                    <div class="font-semibold shrink-0 pl-2 ${t.type === 'income' ? 'text-emerald-400' : 'text-red-400'}">
                         ${t.type === 'income' ? '+' : '-'}E${parseFloat(t.amount).toFixed(2)}
                     </div>
                 `;
@@ -390,8 +396,8 @@
                 data: {
                     labels: labels,
                     datasets: [
-                        { label: 'Income', data: incomeData, backgroundColor: '#4ade80', borderRadius: 4 },
-                        { label: 'Expenses', data: expenseData, backgroundColor: '#f87171', borderRadius: 4 }
+                        { label: 'Inflows', data: incomeData, backgroundColor: '#4ade80', borderRadius: 4 },
+                        { label: 'Outflows', data: expenseData, backgroundColor: '#f87171', borderRadius: 4 }
                     ]
                 },
                 options: {
@@ -424,13 +430,48 @@
                 type: 'doughnut',
                 data: {
                     labels: labelsPie,
-                    datasets: [{ data: dataPie, backgroundColor: ['#eab308', '#ec4899', '#8b5cf6', '#22d3ee', '#4ade80', '#f87171', '#60a5fa'], borderWidth: 0 }]
+                    datasets: [{ data: dataPie, backgroundColor: ['#eab308', '#ec4899', '#8b5cf6', '#22d3ee', '#4ade80', '#f87171', '#60a5fa', '#f97316', '#a855f7'], borderWidth: 0 }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
                     cutout: '75%',
                     plugins: { legend: { position: 'right', labels: { color: '#a1a1aa', boxWidth: 8, font: { size: 10 } } } }
+                }
+            });
+
+            // New Horizontal Bar Chart to track concentrations perfectly
+            const ctxBar = document.getElementById('categoryBarChart');
+            if (!ctxBar) return;
+            if (categoryBarChartInstance) categoryBarChartInstance.destroy();
+
+            const sortedCategories = EXPENSE_CATEGORIES.map(cat => {
+                return {
+                    name: cat,
+                    total: transactions.filter(t => t.type === 'expense' && t.category === cat && t.date.startsWith(currentViewMonth)).reduce((sum, t) => sum + parseFloat(t.amount), 0)
+                };
+            }).sort((a, b) => b.total - a.total);
+
+            categoryBarChartInstance = new Chart(ctxBar, {
+                type: 'borderless' || 'bar',
+                data: {
+                    labels: sortedCategories.map(c => c.name),
+                    datasets: [{
+                        data: sortedCategories.map(c => c.total),
+                        backgroundColor: '#eab308',
+                        borderRadius: 6,
+                        barThickness: 14
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: '#27272a' }, ticks: { color: '#71717a', font: { size: 10 } } },
+                        y: { grid: { display: false }, ticks: { color: '#e4e4e7', font: { size: 11 } } }
+                    }
                 }
             });
         }
@@ -445,7 +486,7 @@
             }).sort((a, b) => new Date(b.date) - new Date(a.date));
             
             if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-zinc-500 text-xs">No entries matching search criteria</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" class="text-center py-8 text-zinc-500 text-xs">No entries matching filter parameters</td></tr>`;
                 return;
             }
             
@@ -459,7 +500,7 @@
                         <button onclick="deleteTransaction('${t.id}')" class="text-zinc-600 hover:text-red-400 ml-2"><i class="fa-solid fa-trash-can text-xs"></i></button>
                     </td>
                     <td class="py-3"><span class="px-2 py-0.5 rounded-full bg-zinc-800 text-[11px] text-zinc-400">${escapeHtml(t.category)}</span></td>
-                    <td class="py-3 text-right font-semibold ${t.type === 'income' ? 'amount-positive' : 'amount-negative'}">
+                    <td class="py-3 text-right font-semibold ${t.type === 'income' ? 'text-emerald-400' : 'text-red-400'}">
                         E${parseFloat(t.amount).toFixed(2)}
                     </td>
                 `;
@@ -470,47 +511,10 @@
         function filterTransactions() { renderTransactions(); }
         
         function deleteTransaction(id) {
-            if (confirm("Remove operational ledger entry?")) {
+            if (confirm("Remove this operational ledger entry?")) {
                 transactions = transactions.filter(t => t.id !== id);
                 saveToLocalStorage();
                 renderTransactions();
-            }
-        }
-        
-        function renderBudgets() {
-            const container = document.getElementById('budgets-container');
-            container.innerHTML = '';
-            
-            EXPENSE_BUDGET_CATEGORIES.forEach(cat => {
-                const spent = transactions.filter(t => t.type === 'expense' && t.category === cat && t.date.startsWith(currentViewMonth)).reduce((sum, t) => sum + parseFloat(t.amount), 0);
-                const limit = budgets[cat] || 0;
-                const percent = limit > 0 ? Math.min(100, Math.round((spent / limit) * 100)) : 0;
-                
-                const div = document.createElement('div');
-                div.className = "bg-zinc-900 rounded-3xl p-5 space-y-3 card";
-                div.innerHTML = `
-                    <div class="flex justify-between items-center text-sm">
-                        <div class="font-medium">${escapeHtml(cat)}</div>
-                        <div class="text-xs text-zinc-400 font-mono">E${spent.toFixed(0)} / E${limit}</div>
-                    </div>
-                    <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
-                        <div class="h-full bg-yellow-400 transition-all" style="width: ${percent}%"></div>
-                    </div>
-                    <div class="flex justify-between text-[11px] text-zinc-500">
-                        <div>${percent}% Allocated</div>
-                        <button onclick="editBudget('${cat}')" class="text-yellow-400 font-medium hover:underline">Set Limit</button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-        
-        function editBudget(cat) {
-            const val = prompt(`Set target limit value for ${cat}:`, budgets[cat] || 0);
-            if (val !== null && !isNaN(parseFloat(val))) {
-                budgets[cat] = Math.max(0, parseFloat(val));
-                saveToLocalStorage();
-                renderBudgets();
             }
         }
         
@@ -520,7 +524,7 @@
             
             const topContainer = document.getElementById('top-expenses');
             topContainer.innerHTML = '';
-            Object.entries(expenseByCat).sort((a,b)=>b[1]-a[1]).slice(0,4).forEach(([cat, amt]) => {
+            Object.entries(expenseByCat).sort((a,b)=>b[1]-a[1]).slice(0,5).forEach(([cat, amt]) => {
                 const row = document.createElement('div');
                 row.className = "flex justify-between items-center border-b border-zinc-800 pb-2 last:border-0";
                 row.innerHTML = `<span class="text-zinc-400">${escapeHtml(cat)}</span><span class="font-semibold text-red-400">E${amt.toFixed(2)}</span>`;
@@ -582,7 +586,7 @@
             if (type === 'income') {
                 select.innerHTML = `<option value="Income">Income</option>`;
             } else {
-                EXPENSE_BUDGET_CATEGORIES.forEach(cat => { select.innerHTML += `<option value="${cat}">${cat}</option>`; });
+                EXPENSE_CATEGORIES.forEach(cat => { select.innerHTML += `<option value="${cat}">${cat}</option>`; });
             }
         }
         
@@ -599,7 +603,7 @@
         
         function saveTransaction() {
             const amt = parseFloat(document.getElementById('modal-amount').value);
-            if (!amt || amt <= 0) { alert("Provide a valid currency numeric value"); return; }
+            if (!amt || amt <= 0) { alert("Provide a valid numeric value."); return; }
             
             transactions.unshift({
                 id: Date.now().toString(),
@@ -607,7 +611,7 @@
                 type: currentType,
                 category: document.getElementById('modal-category').value,
                 amount: amt,
-                description: document.getElementById('modal-desc').value.trim() || "Unspecified Ledger Item"
+                description: document.getElementById('modal-desc').value.trim() || "Unspecified Record Label"
             });
             
             saveToLocalStorage();
@@ -624,7 +628,7 @@
             updateMonthDisplay();
             renderDashboard();
             if (!document.getElementById('page-1').classList.contains('hidden')) renderTransactions();
-            if (!document.getElementById('page-2').classList.contains('hidden')) renderBudgets();
+            if (!document.getElementById('page-2').classList.contains('hidden')) renderReports();
         }
         
         function showMonthPicker() {
@@ -651,19 +655,19 @@
                 r.onload = ev => {
                     try {
                         const data = JSON.parse(ev.target.result);
-                        if (data.transactions && confirm("Overwrite working local client layout database?")) {
-                            transactions = data.transactions; budgets = data.budgets || {};
+                        if (data.transactions && confirm("Overwrite local tracker database?")) {
+                            transactions = data.transactions;
                             saveToLocalStorage(); navigate(0);
                         }
-                    } catch { alert("Invalid structure profile backup layout parsed"); }
+                    } catch { alert("Failed to parse valid backup data layout."); }
                 };
                 r.readAsText(file);
             };
             input.click();
         }
         
-        function clearAllData() { if (confirm("Wipe all locally saved transactions permanently?")) { transactions = []; budgets = {}; saveToLocalStorage(); navigate(0); } }
-        function resetApp() { if (confirm("Purge application engine variables?")) { localStorage.clear(); location.reload(); } }
+        function clearAllData() { if (confirm("Wipe full ledger history permanently?")) { transactions = []; saveToLocalStorage(); navigate(0); } }
+        function resetApp() { if (confirm("Reset local sandbox storage parameters?")) { localStorage.clear(); location.reload(); } }
         function escapeHtml(str) { return str.replace(/[&<>]/g, m => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[m])); }
         
         window.onload = function() {
